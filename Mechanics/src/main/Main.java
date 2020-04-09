@@ -7,7 +7,7 @@ import objects.ShiftRod;
 import paint.Painter;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -24,12 +24,12 @@ public class Main {
 
         Painter painter = new Painter();
 
-        Gear bodyGear = new Gear(new Point(200,200+x*70), 4*x, 90, 8);
-        Axle bodyAxle = new Axle(new Point(200+x*41,200+x*76));     //y = 282
-        Gear firstLegGear = new Gear(new Point(200+x*46,200+x*134), 12*x,270,4);
-        Gear secondLegGear = new Gear(new Point(200+x*46,200+x*134), 12*x,90,4);
-        Axle legAxle = new Axle(new Point(200+x*78,200+x*134));
-        Axle handAxle = new Axle(new Point(200,200));
+        Gear bodyGear = new Gear(new Point2D.Double(200, 200 + x * 70), 4*x, 90, 8);
+        Axle bodyAxle = new Axle(new Point2D.Double(200+x*41,200+x*76));     //y = 282
+        Gear firstLegGear = new Gear(new Point2D.Double(200+x*46,200+x*134), 12*x,270,4);
+        Gear secondLegGear = new Gear(new Point2D.Double(200+x*46,200+x*134), 12*x,90,4);
+        Axle legAxle = new Axle(new Point2D.Double(200+x*78,200+x*134));
+        Axle handAxle = new Axle(new Point2D.Double(200,200));
 
         ShiftRod bodyShiftRod = new ShiftRod(x*40,x*87,x*37,-1);
         ShiftRod firstLegShiftRod = new ShiftRod(x*40,x*76,x*40,-1);

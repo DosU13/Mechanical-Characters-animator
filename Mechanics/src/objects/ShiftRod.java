@@ -1,14 +1,16 @@
 package objects;
 
-import math._Math;
+import helpers.MathHelper;
+import helpers.PaintHelper;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class ShiftRod implements Machine {
-    private Point firstPin, secondPin, joint, mainPin;  // first one is longer
+    private Point2D.Double firstPin, secondPin, joint, mainPin;  // first one is longer
     private int lenToTheJoint, firstLen, secondLen, side;
-    private ArrayList<Point> points;
+    private ArrayList<Point2D.Double> points;
     private Boolean isNan;
 
     public ShiftRod(int lenToTheJoint, int firstLen, int secondLen, int side) {
@@ -16,31 +18,31 @@ public class ShiftRod implements Machine {
         this.firstLen = firstLen;
         this.secondLen = secondLen;
         this.side = side;
-        joint = new Point();
-        mainPin = new Point();
+        joint = new Point2D.Double();
+        mainPin = new Point2D.Double();
         points = new ArrayList<>();
         isNan = false;
     }
 
-    public void setPins(Point firstPin, Point secondPin) {
+    public void setPins(Point2D.Double firstPin, Point2D.Double secondPin) {
         this.firstPin = firstPin;
         this.secondPin = secondPin;
     }
 
-    public Point getMainPin() {
+    public Point2D.Double getMainPin() {
         return mainPin;
     }
 
     public void nextFrame() {
-        joint = _Math.getJoint(lenToTheJoint,secondLen,firstPin,secondPin,side);
+        joint = MathHelper.getJoint(lenToTheJoint,secondLen,firstPin,secondPin,side);
         isNan = joint == null;
-        if (!isNan) mainPin = _Math.getMainPin(firstPin, joint,firstLen,lenToTheJoint);
+        if (!isNan) mainPin = MathHelper.getMainPin(firstPin, joint,firstLen,lenToTheJoint);
         else mainPin = null;
         if (mainPin!=null){
             isNan = false;
         }
         else isNan = true;
-        if (!isNan) points.add(new Point(mainPin));
+        if (!isNan) points.add(new Point2D.Double(mainPin.getX(),mainPin.getY()));
     }
 
     public void nextFrameNew(){
@@ -88,26 +90,33 @@ public class ShiftRod implements Machine {
         double xm = x1 + (x - x1) * firstLen / a;
         double ym = y1 + (y - y1) * firstLen / a;
         mainPin.setLocation(xm, ym);
-        points.add(new Point(mainPin));
+        points.add(new Point2D.Double(mainPin.getX(),mainPin.getY()));
     }
 
     @Override
-    public void paint(Graphics g) {
+    public void paint(Graphics graphics) {
+        Graphics2D g = (Graphics2D) graphics;
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         if (isNan){
             g.drawString("Nan is found. It is error man!!!", 800,500);
         }
         else {
-            g.setColor(Color.DARK_GRAY);
-            g.drawLine(firstPin.x, firstPin.y, mainPin.x, mainPin.y);
-            g.drawLine(secondPin.x, secondPin.y, joint.x, joint.y);
-            g.drawLine(firstPin.x, firstPin.y, joint.x, joint.y);
-            g.setColor(Color.RED);
+            g.setStroke(new BasicStroke(3));
+            g.setColor(new Color(133, 94, 66));
+            PaintHelper.drawLine(g,firstPin,mainPin);
+            PaintHelper.drawLine(g,secondPin,joint);
+            PaintHelper.drawLine(g,firstPin,joint);
 
+            g.setColor(new Color(253,51,51));
+            g.setStroke(new BasicStroke(1));
             for (int i = 0; i < points.size(); i++) {
-                Point p = points.get(i);
-                if (i > 0) {
-                    g.drawLine(p.x, p.y, p.x, p.y);
+                Point2D.Double p = points.get(i);
+                Point2D.Double pp;
+                if (i != 0) {
+                    pp = points.get(i-1);
                 }
+                else pp = points.get(i);
+                PaintHelper.drawLine(g,p,pp);
             }
         }
     }

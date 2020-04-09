@@ -1,17 +1,12 @@
 package outsideExperiments;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.Rectangle2D;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 public class MouseMoveScale extends JPanel {
     private Rectangle2D.Float myRect = new Rectangle2D.Float(50, 50, 50, 50);
@@ -30,8 +25,7 @@ public class MouseMoveScale extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         g2d.setColor(new Color(0, 0, 200));
         g2d.fill(myRect);

@@ -7,7 +7,7 @@ import objects.ShiftRod;
 import paint.Painter;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -23,8 +23,8 @@ public class TestMain {
 
         Painter painter = new Painter();
 
-        Gear bodyGear = new Gear(new Point(100,300), 100, 0, 8);
-        Axle bodyAxle = new Axle(new Point(300,300));
+        Gear bodyGear = new Gear(new Point2D.Double(100,300), 100, 0, 8);
+        Axle bodyAxle = new Axle(new Point2D.Double(300,300));
 
         ShiftRod bodyShiftRod = new ShiftRod(360,360,173,-1);
 
