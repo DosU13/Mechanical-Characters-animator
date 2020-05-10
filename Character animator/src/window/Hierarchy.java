@@ -1,8 +1,23 @@
 package window;
 
-import javafx.collections.ObservableList;
+import objects.Machine;
 
-public abstract class Hierarchy implements ObservableList {
+import java.util.ArrayList;
+
+public class Hierarchy extends ArrayList<Machine> {
+    private int count;
+
     public Hierarchy() {
+        count = 1;
+    }
+
+
+
+    public ArrayList<String> getNames(){
+        ArrayList<String> result = new ArrayList<>();
+        for (Machine m: this){
+            result.add(m.getName());
+        }
+        return result;
     }
 }

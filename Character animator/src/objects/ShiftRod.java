@@ -8,14 +8,17 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import main.Colors;
+import window.DetailsBoxManager;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class ShiftRod extends Group implements Machine {
-    private DraggableCircle supportRodsPin = new DraggableCircle(), mainRodsPin = new DraggableCircle(),
-            jointPin = new DraggableCircle(Colors.AXLE), mainPin = new DraggableCircle(Colors.AXLE);
+    private DraggableCircle supportRodsPin = new DraggableCircle(), mainRodsPin = new DraggableCircle(400,200,5,Colors.AXLE),
+            jointPin = new DraggableCircle(), mainPin = new DraggableCircle();
     private DraggableLine supportRod, mainRodSupportPart, mainRodMainPart;
     private int side;
     private ArrayList<Point2D.Double> points;
@@ -43,10 +46,12 @@ public class ShiftRod extends Group implements Machine {
     }
 
     public void setSupportRodsPin(Machine smallRodsPinsMachine){
+        this.getChildren().remove(supportRodsPin);
         this.supportRodsPin = smallRodsPinsMachine.getMainPin();
     }
 
     public void setMainRodsPin(Machine secondPinsMachine){
+        this.getChildren().remove(mainRodsPin);
         this.mainRodsPin = secondPinsMachine.getMainPin();
     }
 
@@ -123,32 +128,48 @@ public class ShiftRod extends Group implements Machine {
         }
         else {
             status.setTextFill(Colors.RED.get());
-            status.setText("NaN value appeared :    "+this);
+            status.setStyle("-fx-font-weight: bold");
+            status.setText("NaN value appeared :    "+getName());
         }
     }
 
     @Override
-    public void setToDetailsBox(VBox detailsBox) {
+    public void setToDetailsBox(VBox detailsBox, DetailsBoxManager detailsBoxManager) {
         detailsBox.getChildren().clear();
-        AnchorPane supportPinPane = new AnchorPane() , mainPinPane = new AnchorPane(), supportRodPane = new AnchorPane(),
+        AnchorPane nameAnchorPane = new AnchorPane(), supportPinPane = new AnchorPane() , mainPinPane = new AnchorPane(), supportRodPane = new AnchorPane(),
                 mainRodSupportPartPane = new AnchorPane(), mainRodMainPartPane = new AnchorPane();
         Button supportPinButton = new Button("support pin"), mainPinButton = new Button("main pin");
-        Label supportRodLabel = new Label("support's length : "),
+        Label nameLabel = new Label("name : "), supportRodLabel = new Label("support's length : "),
                 mainRodSupportPartLabel = new Label("Imain's length : "), mainRodMainPartLabel = new Label("IImain's length : ");
-        TextArea supportPinTextArea = new TextArea(), mainPinTextArea = new TextArea(), supportRodTextArea = new TextArea(),
+        TextField supportPinTextArea = new TextField(), mainPinTextArea = new TextField();
+        TextArea supportRodTextArea = new TextArea(),
                 mainRodSupportPartTextArea = new TextArea(), mainRodMainPartTextArea = new TextArea();
         supportPinTextArea.setLayoutX(100); mainPinTextArea.setLayoutX(100); supportRodTextArea.setLayoutX(100);
         mainRodSupportPartTextArea.setLayoutX(100); mainRodMainPartTextArea.setLayoutX(100);
 
+        TextField nameTextArea = new TextField(name);
+        nameTextArea.setLayoutX(100);
+        nameTextArea.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            this.setName(newValue);
+            detailsBoxManager.makeRefreshHierarchy();
+        });
         supportPinButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-
+                detailsBoxManager.setSupportPinSetter(ShiftRod.this);
+                supportPinTextArea.setText("Select");
             }
         });
-        supportPinTextArea.setText(String.valueOf(supportRodsPin));
+        mainPinButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                detailsBoxManager.setMainPinSetter(ShiftRod.this);
+                mainPinTextArea.setText("Select");
+            }
+        });
+        supportPinTextArea.setText(supportRodsPin.getParentMachine().getName());
         supportPinTextArea.setEditable(false);
-        mainPinTextArea.setText(String.valueOf(mainRodsPin));
+        mainPinTextArea.setText(mainRodsPin.getParentMachine().getName());
         mainPinTextArea.setEditable(false);
         supportRodTextArea.setText(String.valueOf(supportRod.getLength()));
         supportRodTextArea.textProperty().addListener((observableValue, oldValue, newValue) -> {
@@ -174,13 +195,14 @@ public class ShiftRod extends Group implements Machine {
             mainRodMainPart.setLength(d);
             mainRodMainPart.changed();
         });
+        nameAnchorPane.getChildren().addAll(nameLabel,nameTextArea);
         supportPinPane.getChildren().addAll(supportPinButton,supportPinTextArea);
         mainPinPane.getChildren().addAll(mainPinButton,mainPinTextArea);
         supportRodPane.getChildren().addAll(supportRodLabel,supportRodTextArea);
         mainRodSupportPartPane.getChildren().addAll(mainRodSupportPartLabel,mainRodSupportPartTextArea);
         mainRodMainPartPane.getChildren().addAll(mainRodMainPartLabel,mainRodMainPartTextArea);
 
-        detailsBox.getChildren().addAll(supportPinPane,mainPinPane,supportRodPane,mainRodSupportPartPane,mainRodMainPartPane);
+        detailsBox.getChildren().addAll(nameAnchorPane,supportPinPane,mainPinPane,supportRodPane,mainRodSupportPartPane,mainRodMainPartPane);
 
     }
 

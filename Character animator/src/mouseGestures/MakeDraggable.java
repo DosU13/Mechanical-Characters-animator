@@ -26,8 +26,26 @@ public class MakeDraggable {
         selected = machine;
     }
 
+    public Machine getSelected(){
+        return selected;
+    }
+
     public void addAll(List<Machine> machines){
         for (Machine machine:machines) { this.add(machine);}
+    }
+
+    public void setSelected(Machine machine) {
+        if (machine.isSelected()) {
+            machine.setIsSelected(false);
+            //selected = null;
+            detailsBoxManager.selectionChanged(null);
+        }
+        else {
+            selected.setIsSelected(false);
+            selected = machine;
+            machine.setIsSelected(true);
+            detailsBoxManager.selectionChanged(selected);
+        }
     }
 
     public class CircleMakeDraggable {

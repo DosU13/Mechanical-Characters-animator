@@ -3,10 +3,12 @@ package objects;
 import helper.MathHelper;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 import main.Colors;
+import window.DetailsBoxManager;
 
 public class Gear extends Group implements Machine {
     private Boolean isSelected = false, isAnimation = false;
@@ -121,16 +123,24 @@ public class Gear extends Group implements Machine {
     }
 
     @Override
-    public void setToDetailsBox(VBox detailsBox){
+    public void setToDetailsBox(VBox detailsBox, DetailsBoxManager detailsBoxManager){
         detailsBox.getChildren().clear();
-        AnchorPane xAnchorPane = new AnchorPane() , yAnchorPane = new AnchorPane(), radiusPane = new AnchorPane(),
-                startingAnglePane = new AnchorPane(), speedPane = new AnchorPane();
-        Label xLabel = new Label("x : "), yLabel = new Label("y : "), radiusLabel = new Label("radius : "),
+        AnchorPane nameAnchorPane = new AnchorPane(), xAnchorPane = new AnchorPane() , yAnchorPane = new AnchorPane(),
+                radiusPane = new AnchorPane(), startingAnglePane = new AnchorPane(), speedPane = new AnchorPane();
+        Label nameLabel = new Label("name : "), xLabel = new Label("x : "), yLabel = new Label("y : "), radiusLabel = new Label("radius : "),
                 startingAngleLabel = new Label("angle : "), speedLabel = new Label("speed : ");
         TextArea xTextArea = new TextArea(), yTextArea = new TextArea(), radiusTextArea = new TextArea(),
                 startingAngleTextArea = new TextArea(), speedTextArea = new TextArea();
         xTextArea.setLayoutX(50); yTextArea.setLayoutX(50); radiusTextArea.setLayoutX(50);
         startingAngleTextArea.setLayoutX(50); speedTextArea.setLayoutX(50);
+
+        TextField nameTextArea = new TextField(name);
+        nameTextArea.setLayoutX(50);
+        nameTextArea.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            this.setName(newValue);
+            detailsBoxManager.makeRefreshHierarchy();
+        });
+
         xTextArea.setText(String.valueOf(center.getCenterX()));
         xTextArea.textProperty().addListener((observable , oldValue, newValue) -> {
             double d = 0.0;
@@ -170,12 +180,13 @@ public class Gear extends Group implements Machine {
             catch (NumberFormatException e) {e.fillInStackTrace();}
             speedDegreePerSecond = (int)d;
         });
+        nameAnchorPane.getChildren().addAll(nameLabel,nameTextArea);
         xAnchorPane.getChildren().addAll(xLabel,xTextArea);
         yAnchorPane.getChildren().addAll(yLabel,yTextArea);
         radiusPane.getChildren().addAll(radiusLabel,radiusTextArea);
         startingAnglePane.getChildren().addAll(startingAngleLabel,startingAngleTextArea);
         speedPane.getChildren().addAll(speedLabel,speedTextArea);
 
-        detailsBox.getChildren().addAll(xAnchorPane,yAnchorPane,radiusPane,startingAnglePane,speedPane);
+        detailsBox.getChildren().addAll(nameAnchorPane,xAnchorPane,yAnchorPane,radiusPane,startingAnglePane,speedPane);
     }
 }

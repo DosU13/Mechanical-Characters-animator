@@ -17,12 +17,7 @@ public class DraggableCircle extends Circle {
     }
 
     public DraggableCircle() {
-        this.setRadius(5);
-    }
-
-    public DraggableCircle(Colors colors) {
-        this.setRadius(5);
-        this.colors = colors;
+        this(200,200,5,Colors.AXLE);
     }
 
     public void select(){

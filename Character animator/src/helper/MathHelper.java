@@ -62,7 +62,6 @@ public class MathHelper {
 
     public static Pair<Double,Double> getMainPin(DraggableCircle pin , DraggableCircle jointPin,
                                                  DraggableLine lenToTheJoint, DraggableLine lenAfterJoint){
-        DraggableCircle mainPin = new DraggableCircle();
         double x1 = pin.getCenterX();
         double y1 = pin.getCenterY();
         double xj = jointPin.getCenterX();
