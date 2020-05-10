@@ -15,7 +15,7 @@ public class Main extends Application {
         primaryStage.setMaximized(true);
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Mechanical Character Animator");
-        primaryStage.setScene(new Scene(root, 5000, 3000));
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 

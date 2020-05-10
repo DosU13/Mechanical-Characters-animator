@@ -9,6 +9,8 @@ import objects.DraggableLine;
 import objects.Machine;
 import window.DetailsBoxManager;
 
+import java.util.List;
+
 public class MakeDraggable {
     private Machine selected = null;
     private DetailsBoxManager detailsBoxManager;
@@ -24,7 +26,7 @@ public class MakeDraggable {
         selected = machine;
     }
 
-    public void addAll(Machine... machines){
+    public void addAll(List<Machine> machines){
         for (Machine machine:machines) { this.add(machine);}
     }
 
@@ -69,14 +71,14 @@ public class MakeDraggable {
             draggableCircle.setCenterY(event.getSceneY() - mouseLayoutYOnPressed);
             draggableCircle.changed();
 
+            draggableNode.getScene().setCursor(Cursor.MOVE);
             selected.setIsSelected(false);
             selected = parentMachine;
             parentMachine.setIsSelected(true);
             detailsBoxManager.selectionChanged(selected);
         };
 
-        private EventHandler<MouseEvent> onMouseReleasedEventHandler = event -> {
-        };
+        private EventHandler<MouseEvent> onMouseReleasedEventHandler = event -> draggableNode.getScene().setCursor(Cursor.DEFAULT);
     }
 
     public class LineMakeDraggable {

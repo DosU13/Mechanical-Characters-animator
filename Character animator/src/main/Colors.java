@@ -20,6 +20,17 @@ public enum Colors {
     }
 
     public Color getSelected() {
-        return color.brighter();
+        double r = color.getRed();
+        double g = color.getGreen();
+        double b = color.getBlue();
+        return Color.rgb(brighter(r),brighter(g),brighter(b));
+    }
+
+    private int brighter(double x){
+        x = 1 - x;
+        x = (x * 0.8);
+        x = 1 - x;
+        x = 255*x;
+        return (int)x;
     }
 }

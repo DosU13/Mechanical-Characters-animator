@@ -8,7 +8,7 @@ import main.Colors;
 
 public class DraggableCircle extends Circle {
     private Machine parentMachine;
-    private Boolean changed = false;
+    private Boolean changed = false, isNull = false;
     private Colors colors;
 
     public DraggableCircle(double centerX, double centerY, double radius, Colors colors) {
@@ -16,12 +16,21 @@ public class DraggableCircle extends Circle {
         this.colors = colors;
     }
 
+    public DraggableCircle() {
+        this.setRadius(5);
+    }
+
+    public DraggableCircle(Colors colors) {
+        this.setRadius(5);
+        this.colors = colors;
+    }
+
     public void select(){
-        this.setFill(colors.get());
+        this.setFill(colors.getSelected());
     }
 
     public void deselect(){
-        this.setFill(colors.getSelected());
+        this.setFill(colors.get());
     }
 
     public Machine getParentMachine() {
@@ -36,12 +45,22 @@ public class DraggableCircle extends Circle {
         return thisChanged;
     }
 
+    public boolean isNull(){
+        return isNull;
+    }
+
     public void setParentMachine(Machine parentMachine) {
         this.parentMachine = parentMachine;
     }
 
     public void setLocation(Pair<Double,Double> location){
-        this.setCenterX(location.getKey());
-        this.setCenterY(location.getValue());
+        if (location!=null) {
+            this.setCenterX(location.getKey());
+            this.setCenterY(location.getValue());
+            isNull = false;
+        }
+        else {
+            isNull = true;
+        }
     }
 }

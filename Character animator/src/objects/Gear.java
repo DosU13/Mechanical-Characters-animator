@@ -9,10 +9,11 @@ import javafx.util.Pair;
 import main.Colors;
 
 public class Gear extends Group implements Machine {
-    private Boolean isSelected = false;
+    private Boolean isSelected = false, isAnimation = false;
     private DraggableCircle center, gear, pinionCircle;
     private DraggableLine line;
     private int degree, speedDegreePerSecond, startingAngle;
+    private String name;
 
     public Gear(int x , int y, int radius, int startingAngle, int speedDegreePerSecond) {
         this.degree = startingAngle;
@@ -33,6 +34,7 @@ public class Gear extends Group implements Machine {
         return isSelected;
     }
 
+    @Override
     public void setIsSelected(Boolean isSelected) {
         this.isSelected = isSelected;
         if (isSelected) {
@@ -60,8 +62,29 @@ public class Gear extends Group implements Machine {
     }
 
     @Override
-    public void nextFrame() {
-        degree -= speedDegreePerSecond;
+    public DraggableCircle getMainPin(){return pinionCircle;}
+
+    @Override
+    public void setAnimationSwitch(Boolean animationSwitch) {
+        isAnimation = animationSwitch;
+        if (isAnimation){
+            degree = startingAngle;
+        }
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void nextFrame(Label status) {
+        if (isAnimation) degree -= speedDegreePerSecond;
         if (degree < 0) {
             degree += 360;
         }
@@ -87,7 +110,6 @@ public class Gear extends Group implements Machine {
             line.setLocation(center,pinionCircle);
         }
         else if(line.isChanged()){
-            System.out.println(line.getLength());
             pinionCircle.setLocation(MathHelper.getPinionLocation(center, line.getLength(), degree));
             line.setLocation(center,pinionCircle);
             gear.setRadius(line.getLength()+10);
@@ -104,7 +126,7 @@ public class Gear extends Group implements Machine {
         AnchorPane xAnchorPane = new AnchorPane() , yAnchorPane = new AnchorPane(), radiusPane = new AnchorPane(),
                 startingAnglePane = new AnchorPane(), speedPane = new AnchorPane();
         Label xLabel = new Label("x : "), yLabel = new Label("y : "), radiusLabel = new Label("radius : "),
-                startingAngleLabel = new Label("staring angle : "), speedLabel = new Label("speed(degree/second) : ");
+                startingAngleLabel = new Label("angle : "), speedLabel = new Label("speed : ");
         TextArea xTextArea = new TextArea(), yTextArea = new TextArea(), radiusTextArea = new TextArea(),
                 startingAngleTextArea = new TextArea(), speedTextArea = new TextArea();
         xTextArea.setLayoutX(50); yTextArea.setLayoutX(50); radiusTextArea.setLayoutX(50);

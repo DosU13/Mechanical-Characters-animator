@@ -2,12 +2,8 @@ package helper;
 
 
 import javafx.util.Pair;
-import main.Colors;
-import objects.Axle;
 import objects.DraggableCircle;
-
-import java.awt.*;
-import java.awt.geom.Point2D;
+import objects.DraggableLine;
 
 public class MathHelper {
     public static double distance(DraggableCircle x, DraggableCircle y){
@@ -26,11 +22,10 @@ public class MathHelper {
         return new Pair<>(x, y);
     }
 
-    public static Point2D.Double getJoint(double lenToTheJoint, double secondLen,
-                                          DraggableCircle firstPin, DraggableCircle secondPin, int side){
-        Point2D.Double joint = new Point2D.Double();
-        double a = lenToTheJoint;
-        double b = secondLen;
+    public static Pair<Double, Double> getJoint(DraggableLine firstRod, DraggableLine secondRod,
+                                                DraggableCircle firstPin, DraggableCircle secondPin, int side){
+        double a = firstRod.getLength();
+        double b = secondRod.getLength();
         double l = MathHelper.distance(firstPin, secondPin);
         double x1 = 0 , y1 = 0;
         try {
@@ -58,23 +53,26 @@ public class MathHelper {
             }
         }
         if (!Double.isNaN(xj) && !Double.isNaN(yj)) {
-            joint.setLocation(xj, yj);
-            return joint;
+            return new Pair<Double,Double>(xj,yj);
         }
-        else return null;
+        else{
+            return null;
+        }
     }
 
-    public static Point2D.Double getMainPin(Point2D.Double firstPin , Point2D.Double joint, double firstLen, double lenToTheJoint){
-        Point2D.Double mainPin = new Point2D.Double();
-        double x1 = firstPin.getX();
-        double y1 = firstPin.getY();
-        double xj = joint.getX();
-        double yj = joint.getY();
-        double xm = x1 + (xj - x1) * firstLen / lenToTheJoint;
-        double ym = y1 + (yj - y1) * firstLen / lenToTheJoint;
+    public static Pair<Double,Double> getMainPin(DraggableCircle pin , DraggableCircle jointPin,
+                                                 DraggableLine lenToTheJoint, DraggableLine lenAfterJoint){
+        DraggableCircle mainPin = new DraggableCircle();
+        double x1 = pin.getCenterX();
+        double y1 = pin.getCenterY();
+        double xj = jointPin.getCenterX();
+        double yj = jointPin.getCenterY();
+        double xm = x1 + (xj - x1) * (lenToTheJoint.getLength()+lenAfterJoint.getLength())
+                / lenToTheJoint.getLength();
+        double ym = y1 + (yj - y1) * (lenToTheJoint.getLength()+lenAfterJoint.getLength())
+                / lenToTheJoint.getLength();
         if (!Double.isNaN(xm) && !Double.isNaN(ym)) {
-            mainPin.setLocation(xm, ym);
-            return mainPin;
+            return new Pair<>(xm,ym);
         }
         else return null;
     }

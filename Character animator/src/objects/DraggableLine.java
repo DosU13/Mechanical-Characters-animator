@@ -19,11 +19,11 @@ public class DraggableLine extends Line {
     }
 
     public void select(){
-        this.setStroke(colors.get());
+        this.setStroke(colors.getSelected());
     }
 
     public void deselect(){
-        this.setStroke(colors.getSelected());
+        this.setStroke(colors.get());
     }
 
     public double getLength() {

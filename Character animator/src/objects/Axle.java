@@ -1,29 +1,20 @@
 package objects;
 
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
 import main.Colors;
 
 public class Axle extends Group implements Machine {
     private Boolean isSelected = false;
     private DraggableCircle axle;
+    private String name;
 
     public Axle(int x , int y) {
         axle = new DraggableCircle(x,y,5,Colors.AXLE);
         axle.setParentMachine(this);
         this.getChildren().add(axle);
-    }
-
-    public double getCenterX(){
-        return axle.getCenterX();
-    }
-
-    public double getCenterY(){
-        return axle.getCenterY();
     }
 
     @Override
@@ -33,8 +24,8 @@ public class Axle extends Group implements Machine {
 
     public void setIsSelected(Boolean isSelected) {
         this.isSelected = isSelected;
-        if (!isSelected) axle.select();
-        else axle.deselect();
+        if (!isSelected) axle.deselect();
+        else axle.select();
     }
 
     @Override
@@ -48,7 +39,25 @@ public class Axle extends Group implements Machine {
     }
 
     @Override
-    public void nextFrame() {
+    public DraggableCircle getMainPin(){return axle;}
+
+    @Override
+    public void setAnimationSwitch(Boolean animationSwitch) {
+
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void nextFrame(Label status) {
 
     }
 
