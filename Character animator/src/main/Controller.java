@@ -115,24 +115,32 @@ public class Controller {
 //                }
 //            }
 //        });
-
+        animation.setSelected(true);
 
         detailsBoxManager.setNodes(detailsBox,hierarchy);
         makeDraggable.setDetailsBoxManager(detailsBoxManager);
         editorAnchor.getChildren().add(editorPane);
-        Axle axle = new Axle(333,333);
-        Axle axle1 = new Axle(444,444);
-        Gear gear = new Gear(666,666,200,0,5);
-        ShiftRod shiftRod = new ShiftRod(300,300,200,1);
+        Axle axle = new Axle(300,400);
+        Gear gear = new Gear(500,300,50,0,5);
+        Gear gear1 = new Gear(700,500,100,0,5);
+        ShiftRod shiftRod = new ShiftRod(100,100,100,1);
+        ShiftRod shiftRod1 = new ShiftRod(200,200,200,1);
         axle.setName("axle");
-        axle1.setName("axle1");
+        gear1.setName("gear1");
         gear.setName("gear");
         shiftRod.setName("shiftRod");
-        shiftRod.setSupportRodsPin(axle1);
-        shiftRod.setMainRodsPin(gear);
-        machines.addAll(Arrays.asList(axle,axle1,gear,shiftRod));
+        shiftRod1.setName("shiftRod1");
+        shiftRod1.setMainRodsPin(gear1);
+        shiftRod1.setSupportRodsPin(gear);
+        shiftRod.setMainRodsPin(shiftRod1);
+        shiftRod.setSupportRodsPin(axle);
+        machines.addAll(Arrays.asList(axle,gear,gear1,shiftRod,shiftRod1));
         for (Machine m:machines) editorPane.getChildren().add((Node)m);
         makeDraggable.addAll(machines);
+
+        for (Machine m:machines){
+            m.setAnimationSwitch(animation.isSelected());
+        }
 
         refreshHierarchy();
         MyTimer timer = new MyTimer();
